@@ -131,14 +131,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.8.0"
-  multiple_stream_builder:
-    dependency: "direct main"
-    description:
-      name: multiple_stream_builder
-      sha256: fec7a8909d0942d1a8d726b7e3057bd73e2ab64a5ae2da6b7b44a959f17f09fb
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.2"
   path:
     dependency: transitive
     description:
@@ -147,14 +139,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.8.2"
-  rxdart:
-    dependency: "direct main"
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.27.7"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -226,4 +210,3 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=2.19.0 <3.0.0"
-  flutter: ">=1.17.0"

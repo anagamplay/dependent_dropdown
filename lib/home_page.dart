@@ -18,11 +18,15 @@ class _HomePageState extends State<HomePage> {
   String? estado;
   String? cidade;
 
+  bool? estadoSeleted;
+
   @override
   void initState() {
     super.initState();
 
     _blocEstados.fetch();
+
+    estadoSeleted = false;
   }
 
   @override
@@ -37,93 +41,104 @@ class _HomePageState extends State<HomePage> {
 
   _body() {
     final List<Estado> listEstados = [];
+    final List<Cidade> listCidades = [];
 
-    return StreamBuilder(
-      stream: _blocEstados.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('[ERRO]Não foi possível buscar os carros');
-        }
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        children: [
+          StreamBuilder(
+            stream: _blocEstados.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('[ERRO]Não foi possível buscar os carros');
+              }
 
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-        List<Estado> estados = snapshot.data as List<Estado>;
+              List<Estado> estados = snapshot.data as List<Estado>;
 
-        listEstados.addAll(estados);
+              listEstados.addAll(estados);
 
-        return Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DropdownButton(
+              return DropdownButton(
                 hint: const Text("Estado"),
                 items: listEstados.map((e) {
                   return DropdownMenuItem<String>(
-                      value: e.nome, child: Text(e.nome as String));
+                    value: e.nome,
+                    child: Text(e.nome as String),
+                  );
                 }).toList(),
                 value: estado,
                 onChanged: (value) {
                   setState(
                     () {
                       estado = value!;
+
                       for (int i = 0; i < listEstados.length; i++) {
                         if (listEstados[i].nome == value) {
                           _blocCidades.fetch(listEstados[i].sigla as String);
                         }
                       }
+
+                      cidade = null;
+                      estadoSeleted = true;
                     },
                   );
                 },
-              ),
-            ],
+              );
+            },
           ),
-        );
-      },
-    );
-  }
+          StreamBuilder(
+            stream: estadoSeleted == true ? _blocCidades.stream : null,
+            builder: (context, snapshot) {
+              if (estadoSeleted == true) {
+                if (snapshot.hasError) {
+                  return Text('[ERRO]Não foi possível buscar os carros');
+                }
 
-  StreamBuilder<List<Cidade>> cidadesDropdown() {
-    print("Cidades>>>");
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-    final List<Cidade> listCidades = [];
+                List<Cidade> cidades = snapshot.data as List<Cidade>;
 
-    return StreamBuilder(
-      stream: _blocCidades.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('[ERRO]Não foi possível buscar os carros');
-        }
+                if (listCidades.isNotEmpty) {
+                  listCidades.clear();
+                  //print(">>>>>List Cidades: $listCidades");
+                }
+                listCidades.addAll(cidades);
+                //listCidades.map((e) => print(">List Cidades: ${e.nome}")).toString();
 
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+                return DropdownButton(
+                  hint: const Text("Cidade"),
+                  items: listCidades.map((e) {
+                    return DropdownMenuItem<String>(
+                        value: e.nome, child: Text(e.nome as String));
+                  }).toList(),
+                  value: cidade,
+                  onChanged: (value) {
+                    setState(() {
+                      cidade = value!;
+                    });
+                  },
+                );
+              }
 
-        List<Cidade> cidades = snapshot.data as List<Cidade>;
-        print(cidades);
-
-        listCidades.addAll(cidades);
-
-        return DropdownButton(
-          hint: const Text("Cidade"),
-          items: listCidades.map((e) {
-            return DropdownMenuItem<String>(
-                value: e.nome, child: Text(e.nome as String));
-          }).toList(),
-          value: cidade,
-          onChanged: (value) {
-            setState(() {
-              cidade = value!;
-            });
-          },
-        );
-      },
+              return DropdownButton(
+                hint: const Text("Cidade"),
+                items: [],
+                onChanged: null,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
