@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             stream: _blocEstados.stream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('[ERRO]Não foi possível buscar os carros');
+                return Text('[ERRO]Não foi possível buscar os estados');
               }
 
               if (!snapshot.hasData) {
@@ -74,9 +74,8 @@ class _HomePageState extends State<HomePage> {
                 }).toList(),
                 value: estado,
                 onChanged: (value) {
-                  setState(
-                    () {
-                      estado = value!;
+                  setState(() {
+                      estado = value;
 
                       for (int i = 0; i < listEstados.length; i++) {
                         if (listEstados[i].nome == value) {
@@ -97,7 +96,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context, snapshot) {
               if (estadoSeleted == true) {
                 if (snapshot.hasError) {
-                  return Text('[ERRO]Não foi possível buscar os carros');
+                  return Text('[ERRO]Não foi possível buscar as cidades');
                 }
 
                 if (!snapshot.hasData) {
