@@ -18,15 +18,14 @@ class _HomePageState extends State<HomePage> {
   String? estado;
   String? cidade;
 
-  bool? estadoSeleted;
+  bool? isEstadoSelected;
 
   @override
   void initState() {
     super.initState();
 
     _blocEstados.fetch();
-
-    estadoSeleted = false;
+    isEstadoSelected = false;
   }
 
   @override
@@ -44,8 +43,10 @@ class _HomePageState extends State<HomePage> {
     final List<Cidade> listCidades = [];
 
     return Container(
+      alignment: AlignmentDirectional.center,
       padding: EdgeInsets.all(20),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           StreamBuilder(
             stream: _blocEstados.stream,
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                       }
 
                       cidade = null;
-                      estadoSeleted = true;
+                      isEstadoSelected = true;
                     },
                   );
                 },
@@ -92,9 +93,9 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           StreamBuilder(
-            stream: estadoSeleted == true ? _blocCidades.stream : null,
+            stream: isEstadoSelected == true ? _blocCidades.stream : null,
             builder: (context, snapshot) {
-              if (estadoSeleted == true) {
+              if (isEstadoSelected == true) {
                 if (snapshot.hasError) {
                   return Text('[ERRO]Não foi possível buscar as cidades');
                 }
@@ -109,16 +110,15 @@ class _HomePageState extends State<HomePage> {
 
                 if (listCidades.isNotEmpty) {
                   listCidades.clear();
-                  //print(">>>>>List Cidades: $listCidades");
                 }
                 listCidades.addAll(cidades);
-                //listCidades.map((e) => print(">List Cidades: ${e.nome}")).toString();
 
                 return DropdownButton(
                   hint: const Text("Cidade"),
                   items: listCidades.map((e) {
                     return DropdownMenuItem<String>(
-                        value: e.nome, child: Text(e.nome as String));
+                        value: e.nome, child: Text(e.nome as String)
+                    );
                   }).toList(),
                   value: cidade,
                   onChanged: (value) {
