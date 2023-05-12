@@ -2,6 +2,8 @@ import 'package:dependent_dropdown/cidade/cidade.dart';
 import 'package:dependent_dropdown/cidade/cidades_bloc.dart';
 import 'package:dependent_dropdown/estado/estado.dart';
 import 'package:dependent_dropdown/estado/estados_bloc.dart';
+import 'package:dependent_dropdown/widgets/home_dropdown_button.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -65,32 +67,53 @@ class _HomePageState extends State<HomePage> {
 
               listEstados.addAll(estados);
 
-              return DropdownButton(
-                hint: const Text("Estado"),
-                items: listEstados.map((e) {
-                  return DropdownMenuItem<String>(
-                    value: e.nome,
-                    child: Text(e.nome as String),
-                  );
-                }).toList(),
-                value: estado,
-                onChanged: (value) {
-                  setState(() {
-                      estado = value;
+              return FormField(
+                builder: (FormFieldState<String> state) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.fromLTRB(0, 3, 10, 3),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: const Text("Estado"),
+                        items: listEstados.map((e) {
+                          return DropdownMenuItem<String>(
+                            value: e.nome,
+                            child: Text(e.nome as String),
+                          );
+                        }).toList(),
+                        value: estado,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              estado = value;
 
-                      for (int i = 0; i < listEstados.length; i++) {
-                        if (listEstados[i].nome == value) {
-                          _blocCidades.fetch(listEstados[i].sigla as String);
-                        }
-                      }
+                              for (int i = 0; i < listEstados.length; i++) {
+                                if (listEstados[i].nome == value) {
+                                  _blocCidades
+                                      .fetch(listEstados[i].sigla as String);
+                                }
+                              }
 
-                      cidade = null;
-                      isEstadoSelected = true;
-                    },
+                              cidade = null;
+                              isEstadoSelected = true;
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   );
                 },
               );
             },
+          ),
+          SizedBox(
+            height: 10,
           ),
           StreamBuilder(
             stream: isEstadoSelected == true ? _blocCidades.stream : null,
@@ -113,12 +136,11 @@ class _HomePageState extends State<HomePage> {
                 }
                 listCidades.addAll(cidades);
 
-                return DropdownButton(
-                  hint: const Text("Cidade"),
+                return HomeDropdownButton(
+                  "Cidade",
                   items: listCidades.map((e) {
                     return DropdownMenuItem<String>(
-                        value: e.nome, child: Text(e.nome as String)
-                    );
+                        value: e.nome, child: Text(e.nome as String));
                   }).toList(),
                   value: cidade,
                   onChanged: (value) {
@@ -129,11 +151,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
-              return DropdownButton(
-                hint: const Text("Cidade"),
-                items: [],
-                onChanged: null,
-              );
+              return HomeDropdownButton("Cidade");
             },
           ),
         ],
