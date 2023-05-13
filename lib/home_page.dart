@@ -3,7 +3,6 @@ import 'package:dependent_dropdown/cidade/cidades_bloc.dart';
 import 'package:dependent_dropdown/estado/estado.dart';
 import 'package:dependent_dropdown/estado/estados_bloc.dart';
 import 'package:dependent_dropdown/widgets/home_dropdown_button.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
 
     return Container(
       alignment: AlignmentDirectional.center,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -54,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             stream: _blocEstados.stream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('[ERRO]Não foi possível buscar os estados');
+                return const Text('[ERRO]Não foi possível buscar os estados');
               }
 
               if (!snapshot.hasData) {
@@ -93,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           StreamBuilder(
@@ -101,7 +100,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context, snapshot) {
               if (isEstadoSelected == true) {
                 if (snapshot.hasError) {
-                  return Text('[ERRO]Não foi possível buscar as cidades');
+                  return const Text('[ERRO]Não foi possível buscar as cidades');
                 }
 
                 if (!snapshot.hasData) {
