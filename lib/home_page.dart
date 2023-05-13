@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
               List<Estado> estados = snapshot.data as List<Estado>;
 
               listEstados.addAll(estados);
+              listEstados.sort((a, b) => a.nome!.compareTo(b.nome!));
 
               return HomeDropdownButton(
                 "Estado",
