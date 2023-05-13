@@ -67,47 +67,28 @@ class _HomePageState extends State<HomePage> {
 
               listEstados.addAll(estados);
 
-              return FormField(
-                builder: (FormFieldState<String> state) {
-                  return InputDecorator(
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.fromLTRB(0, 3, 10, 3),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: const Text("Estado"),
-                        items: listEstados.map((e) {
-                          return DropdownMenuItem<String>(
-                            value: e.nome,
-                            child: Text(e.nome as String),
-                          );
-                        }).toList(),
-                        value: estado,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              estado = value;
-
-                              for (int i = 0; i < listEstados.length; i++) {
-                                if (listEstados[i].nome == value) {
-                                  _blocCidades
-                                      .fetch(listEstados[i].sigla as String);
-                                }
-                              }
-
-                              cidade = null;
-                              isEstadoSelected = true;
-                            },
-                          );
-                        },
-                      ),
-                    ),
+              return HomeDropdownButton(
+                "Estado",
+                items: listEstados.map((e) {
+                  return DropdownMenuItem<String>(
+                    value: e.nome,
+                    child: Text(e.nome as String),
                   );
+                }).toList(),
+                value: estado,
+                onChanged: (value) {
+                  setState(() {
+                    estado = value;
+
+                    for (int i = 0; i < listEstados.length; i++) {
+                      if (listEstados[i].nome == value) {
+                        _blocCidades.fetch(listEstados[i].sigla as String);
+                      }
+                    }
+
+                    cidade = null;
+                    isEstadoSelected = true;
+                  });
                 },
               );
             },
